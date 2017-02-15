@@ -16,3 +16,4 @@ Any character fed through stdin is broadcasted to all peers.
 
 Characters received from other peers are output to stdout.
 
+If a line of the form "+ip:port" is found on stdin, it is interpreted as a request to connect to the given peer at ip:port
