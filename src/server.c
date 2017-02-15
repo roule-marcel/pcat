@@ -200,7 +200,13 @@ pthread_t th_server;
 void* server_thread(void* x) {
 	char buf[BUFSIZE];
 	while(fgets(buf, BUFSIZE, stdin)) {
-		broadcast(buf, strlen(buf));
+		if(buf[0]=='+') { // Connect to a peer when input is '+ip:port'
+			rtrim(buf);
+			char* addr = &buf[1];
+			char* port = strchr(addr, ':'); *port = 0; port++;
+			client(addr, port);
+		}
+		else broadcast(buf, strlen(buf));
 	}
 	return 0;
 }

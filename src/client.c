@@ -110,6 +110,8 @@ void close_any_client(const char* addr, const char* port) {
 }
 
 void client(const char* _hostname, const char* _port) {
+	if(has_client(_hostname, _port)) return;
+	if(has_connection(_hostname, _port)) return;
 	clients[nb_clients].hostname = malloc(strlen(_hostname)+1);
 	clients[nb_clients].port = malloc(strlen(_port)+1);
 	strcpy(clients[nb_clients].hostname, _hostname);
