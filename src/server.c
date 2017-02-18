@@ -177,6 +177,7 @@ void* connection_thread(void* _c) {
 				j = 0;
 			}
 			if(line[0]!='$') putchar(buf[i]);
+			if(buf[i]=='\n') fflush(stdout);
 		}
 		pthread_mutex_unlock(&mut);
     }
