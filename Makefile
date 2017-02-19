@@ -16,4 +16,5 @@ clean:
 	rm -rf bin
 
 install:
-	cp pcat /usr/bin	
+	cp pcat /usr/bin
+	cp psync /usr/bin	

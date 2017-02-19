@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+	echo "Usage : $0 <directory>" >&2; exit 1;
+fi
+
+
+inotifywait -rm $1 2>/dev/null | while read line; do
+
+DIR=$(echo $line | sed 's|/ .*||g')
+FILE=$(echo $line | sed 's/.* //g')
+EVENT=$(echo $line | sed 's|.*/ ||g' | sed 's| .*||g')
+
+if [ "$EVENT" == "MODIFY" ]; then
+ echo MOD $DIR/$FILE
+ echo %%%BEGIN%%%
+ cat $DIR/$FILE
+ echo %%%END%%%
+elif [ "$EVENT" == "DELETE" ]; then
+ echo DELETE $DIR/$FILE
+fi
+
+done | pcat 15622 $2
