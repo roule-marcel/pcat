@@ -26,6 +26,7 @@
 #define BUFSIZE 512
 
 extern char SERVER_PORT[];
+extern int bPrintAddresses;
 char MY_IP[64];
 
 static pthread_mutex_t mut = PTHREAD_MUTEX_INITIALIZER;
@@ -174,10 +175,13 @@ void* connection_thread(void* _c) {
 			if(buf[i]=='\n') {
 				line[j] = 0;
 				if(line[0]=='$') command(connection, line+1);
+				if(bPrintAddresses)
+					printf("%s:%s %s", connection->addr, connection->port, line);
+				else
+					puts(line);
+				fflush(stdout);
 				j = 0;
 			}
-			if(line[0]!='$') putchar(buf[i]);
-			if(buf[i]=='\n') fflush(stdout);
 		}
 		pthread_mutex_unlock(&mut);
     }

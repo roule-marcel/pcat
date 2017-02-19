@@ -3,6 +3,7 @@
 #include <string.h>
 
 char SERVER_PORT[64];
+int bPrintAddresses = 1;
 
 extern int server(const char* port);
 extern void client(const char* hostname, const char* port);
