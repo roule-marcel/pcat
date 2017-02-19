@@ -30,7 +30,7 @@ FILE=$(echo $l | sed 's|.* ||g')
 if [ "$EVT" == "MOD" ]; then
 	echo "RECREATE $1/REMOTE/$FILE with $WHO"	
 elif [ "$EVT" == "DELETE" ]; then
-	echo "DELETE $1/REMOTE/$FILE (from $WHO)
+	echo "DELETE $1/REMOTE/$FILE (from $WHO)"
 fi
 
 done
