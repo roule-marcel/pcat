@@ -4,20 +4,33 @@ if [ -z "$1" ]; then
 	echo "Usage : $0 <directory>" >&2; exit 1;
 fi
 
+mkdir -p $1/local
 
-inotifywait -rm $1 2>/dev/null | while read line; do
+inotifywait -rm $1/local 2>/dev/null | while read line; do
 
-DIR=$(echo $line | sed 's|/ .*||g')
-FILE=$(echo $line | sed 's/.* //g')
+LOCAL_DIR=$(echo $line | sed 's|/ .*||g')
+LOCAL_FILE=$(echo $line | sed 's/.* //g')
 EVENT=$(echo $line | sed 's|.*/ ||g' | sed 's| .*||g')
 
 if [ "$EVENT" == "MODIFY" ]; then
- echo MOD $DIR/$FILE
+ echo MOD $LOCAL_DIR/$LOCAL_FILE
  echo %%%BEGIN%%%
- cat $DIR/$FILE
+ cat $LOCAL_DIR/$LOCAL_FILE
  echo %%%END%%%
 elif [ "$EVENT" == "DELETE" ]; then
- echo DELETE $DIR/$FILE
+ echo DELETE $LOCAL_DIR/$LOCAL_FILE
 fi
 
-done | pcat 15622 $2
+done | pcat 15622 $2 | while read l; do
+
+WHO=$(echo $l | sed 's| .*||g')
+EVT=$(echo $l | sed 's|[^ ]* ||g' | sed 's| .*||g')
+FILE=$(echo $l | sed 's|.* ||g')
+
+if [ "$EVT" == "MOD" ]; then
+	echo "RECREATE $1/REMOTE/$FILE with $WHO"	
+elif [ "$EVT" == "DELETE" ]; then
+	echo "DELETE $1/REMOTE/$FILE (from $WHO)
+fi
+
+done
