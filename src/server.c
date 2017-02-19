@@ -175,7 +175,7 @@ void* connection_thread(void* _c) {
 			if(buf[i]=='\n') {
 				line[j] = 0;
 				if(line[0]=='$') command(connection, line+1);
-				if(bPrintAddresses)
+				else if(bPrintAddresses)
 					printf("%s:%s %s", connection->addr, connection->port, line);
 				else
 					puts(line);
